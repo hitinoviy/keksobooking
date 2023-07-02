@@ -1,21 +1,3 @@
-function getRandomInteger(min, max) {
-  const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
-  const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-}
-function getRandomFractional(min, max, maxAfterComma) {
-  const lower = Math.min(Math.min(Math.abs(min), Math.abs(max)));
-  const upper = Math.max(Math.max(Math.abs(min), Math.abs(max)));
-  const result = Math.random() * (upper - lower) + lower;
-  return +result.toFixed(maxAfterComma);
-}
-
-
-getRandomInteger(1, 5);
-
-getRandomFractional(2,5, 2);
-
 const photos = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
@@ -41,36 +23,51 @@ const type = [
   'bungalow',
   'hotel'
 ];
-function getRandomPhotos () {
-  const countPhotos = getRandomInteger(1, photos.length);
-  return photos.slice(0,countPhotos);
+
+function getRandomInteger(min, max) {
+  const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
+  const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+}
+function getRandomFractional(min, max, maxAfterComma) {
+  const lower = Math.min(Math.min(Math.abs(min), Math.abs(max)));
+  const upper = Math.max(Math.max(Math.abs(min), Math.abs(max)));
+  const result = Math.random() * (upper - lower) + lower;
+  return +result.toFixed(maxAfterComma);
 }
 
-function createAdt(_, index) {
+const getRandomElements = (elements)=> elements.slice(0,getRandomInteger(1, elements.length));
+const getRandomElement = (arr) => arr[getRandomInteger(0,arr.length-1)];
+
+const getLocations = () => ({
+  lat: getRandomFractional(35.65000, 35.70000, 5),
+  lng: getRandomFractional(139.70000, 139.80000, 5)
+});
+
+function createAdt(index) {
+  const location = getLocations();
   return {
     author: {
-      avatar: `img/avatars/user${index+1 > 9?index+1:`0${index+1}`}.png`
+      avatar: `img/avatars/user${index > 9?index:`0${index+1}`}.png`
     },
     offer: {
       title: 'Название предложения',
-      address: `${this.location.lat}, ${this.location.lng}`,
+      address: `${location.lat}, ${location.lng}`,
       price: getRandomInteger(200,1000),
-      type: 'palace, flat, house, bungalow или hotel',
+      type: getRandomElement(type),
       rooms: getRandomInteger(1,5),
       guests: getRandomInteger(1,5),
-      checkin: ' 12:00, 13:00 или 14:00',
-      checkout: '12:00, 13:00 или 14:00',
-      features: 'массив случайной длины из значений: wifi, dishwasher, parking, washer, elevator, conditioner',
+      checkin: getRandomElement(checkTime),
+      checkout: getRandomElement(checkTime),
+      features: getRandomElements(features),
       description: 'для славян',
-      photos: getRandomPhotos()
+      photos: getRandomElements(photos)
     },
-    location: {
-      lat: getRandomFractional(35.65000,35.70000, 5),
-      lng: getRandomFractional(139.70000,139.80000, 5),
-    }
+    location: location
   };
 }
-function createAtds(countAdt) {
-  return Array.from({length: countAdt}, createAdt);
-}
-console.log(createAtds(10));
+const getAtds = () => Array.from(
+  {length: 10},
+  (_,adtIndex)=> createAdt(adtIndex+1));
+getAtds();
