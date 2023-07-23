@@ -1,7 +1,7 @@
-import {createAdt} from './create-adt.js';
+import {getAtds} from './create-adt.js';
+import {CreateAdts} from './create-adt-element.js';
+import {disabledForms, enabledForms} from './loadForm.js';
 
-
-const getAtds = () => Array.from(
-  {length: 10},
-  (_,adtIndex)=> createAdt(adtIndex+1));
-getAtds();
+disabledForms();
+enabledForms();
+CreateAdts(getAtds());

@@ -5,11 +5,11 @@ const getLocations = () => ({
   lng: getRandomFractional(139.70000, 139.80000, 5)
 });
 
-export function createAdt(index) {
+const createAdt = (index) => {
   const location = getLocations();
   return {
     author: {
-      avatar: `img/avatars/user${index > 9?index:`0${index+1}`}.png`
+      avatar: `img/avatars/user${index > 9 ?index:`0${index}`}.png`
     },
     offer: {
       title: 'Название предложения',
@@ -26,4 +26,7 @@ export function createAdt(index) {
     },
     location: location
   };
-}
+};
+export const getAtds = () => Array.from(
+  {length: 10},
+  (_,adtIndex)=> createAdt(adtIndex+1));
